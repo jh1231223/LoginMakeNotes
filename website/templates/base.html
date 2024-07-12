@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <script
+      type="text/javascript"
+      src="{{ url_for('static', filename='index.js') }}"
+    ></script> -->
+
+    <title>{% block title %}{% endblock %}</title>
+  </head>
+
+  <body>
+    <div class="navbar bg-base-300">
+      <div class="navbar-start">
+        <div class="dropdown">
+          <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h8m-8 6h16"
+              />
+            </svg>
+          </div>
+          <ul
+            tabindex="0"
+            class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+          >
+            {% if user.is_authenticated %}
+            <li><a href="/">Home</a></li>
+            <li><a href="/logout">Logout</a></li>
+            {% else %}
+            <li><a href="/login">Login</a></li>
+            <li><a href="/signUp">Sign Up</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+      <div class="w-full navbar-center hidden lg:flex">
+        <ul class="text-lg menu menu-horizontal px-1">
+          {% if user.is_authenticated %}
+          <li><a href="/">Home</a></li>
+          <li><a href="/logout">Logout</a></li>
+          {% else %}
+          <li>
+            <a href="/login">Login</a>
+          </li>
+          <li><a href="/signUp">Sign Up</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %} {% for category, message in messages%} {% if category == 'error'
+    %}
+    <div role="alert" class="alert alert-error bg-red-200">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6 shrink-0 stroke-current"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+      <span>{{ message }}</span>
+    </div>
+    {% else %}
+    <div role="alert" class="alert alert-success bg-green-200">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6 shrink-0 stroke-current"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+      <span>{{ message }}</span>
+    </div>
+    {% endif %} {% endfor %} {% endif %} {% endwith %}
+    <div>{% block content %}{% endblock %}</div>
+
+    {% block javascript %}
+    <script type="text/javascript">
+      function deleteNote(noteId) {
+        fetch("delete-note/", {
+          method: "POST",
+          body: JSON.stringify({ noteId: noteId }),
+        }).then((_res) => {
+          window.location.href = "/";
+        });
+      }
+    </script>
+    {% endblock %}
+  </body>
+</html>

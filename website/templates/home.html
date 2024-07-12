@@ -1,0 +1,31 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
+%}
+<h1 class="flex flex-row justify-center">Notes</h1>
+<ul class="flex flex-col items-center" id="notes">
+  {% for note in user.notes %}
+  <li
+    class="flex flex-row justify-between border-[1px] p-[8px] rounded w-full max-w-lg"
+  >
+    {{ note.data }}
+    <button class="btn btn-circle" onClick="deleteNote({{ note.id }})">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </li>
+
+  <br />
+  {% endfor %}
+</ul>
+<form class="flex flex-col items-center" method="POST">
+  <textarea
+    class="textarea textarea-bordered textarea-lg w-full max-w-lg"
+    name="note"
+    id="note"
+  ></textarea>
+  <br />
+  <div class="w-full flex flex-row justify-center">
+    <button type="submit" class="mx-[10px] btn bg-gray-400 hover:bg-gray-400">
+      Add Note
+    </button>
+  </div>
+</form>
+{% endblock %}
